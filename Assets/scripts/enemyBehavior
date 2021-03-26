@@ -1,0 +1,68 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class enemyBehavior : MonoBehaviour
+{
+	public Rigidbody rb;
+	
+	private bool side=false;
+	private float startTime=0f;
+	private float rW=0f;
+	private float rL = 0f;
+	private float rT=0f;
+	private float vertexX=0f;
+	private float vertexZ=0f;
+	private float parabolicConstX=0f;
+	private float parabolicConstZ=0f;
+    // Start is called before the first frame update
+    void Start()
+    {
+		startTime=0f;
+        rW = Random.Range(0f, 90f);
+		rL = Random.Range(15f, 30f);
+		rT = Random.Range(4f, 6f); //amount of time in arc
+		
+		if (transform.position.x > 0)
+		{ //if positive x value 
+			vertexX = transform.position.x - rW;
+			vertexZ = transform.position.z - rL;
+			
+			//equation for X
+			parabolicConstX = (transform.position.x + vertexX) / (Mathf.Pow(rT/2f,2f));
+			//equation for Z
+			parabolicConstZ = (transform.position.z - vertexZ) / (Mathf.Pow(rT/2f,2f));
+			
+			side = true;
+			//right side = true
+		}
+		else
+		{
+			vertexX = transform.position.x + rW;
+			vertexZ = transform.position.z - rL;
+			
+			//equation for X
+			parabolicConstX = (transform.position.x + vertexX) / (Mathf.Pow(rT/2f,2f));
+			//Equation for Z
+			parabolicConstZ = (transform.position.z - vertexZ) / (Mathf.Pow(rT/2f,2f));
+			side = false;
+		} //left side = false
+    }
+
+    // Update is called once per frame
+    void FixedUpdate()
+    { //y=a(x-h)^2 + k, k vertical displacement, -h horizontal displacement, a scalar, (h,k) is vertex
+		float xLoc=0f;
+		//new soltn; change X speed over time (parabola), and apply speed over a line 
+		
+		float zLoc=0f;
+		startTime += Time.deltaTime;
+		
+		xLoc = parabolicConstX * (Mathf.Pow(startTime - (rT/2), 2f)) + vertexX;
+		zLoc = parabolicConstZ * (Mathf.Pow(startTime - (rT/2), 2f)) + vertexZ;
+
+		
+		Vector3 newLocation = new Vector3(xLoc, 10f, zLoc);
+		transform.position = newLocation;
+    }
+}
