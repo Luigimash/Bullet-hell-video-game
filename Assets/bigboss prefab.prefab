@@ -134,6 +134,6 @@ MonoBehaviour:
   spawnRate: 0.5
   movespeed: 60
   timeBetweenOscillation: 10
-  bossHP: 100
+  bossHP: 1100
   bossHealthBar: {fileID: 4204800131866572692, guid: c27a67f457df4c84f9872b02734851db,
     type: 3}
